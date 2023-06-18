@@ -2,14 +2,17 @@ from tkinter import *
 import time
 import random
 class Ball:
-    def __init__(self, canvas: Canvas):
-        global ball_list
+    def __init__(self, canvas: Canvas, coord_ball, speed_list):
         self.canvas = canvas
-        self.speed_x = random.randint(-2, 2)
-        self.speed_y = random.randint(-2, 2)
+        self.speed_x = speed_list[0]
+        self.speed_y = speed_list[1]
+        self.coord_x0 = coord_ball[0]
+        self.coord_y0 = coord_ball[1]
+        self.coord_x1 = coord_ball[2]
+        self.coord_y1 = coord_ball[3]
         self.create_ball()
     def create_ball(self):
-        self.id = self.canvas.create_oval(50, 50, 100, 100, fill='red')
+        self.id = self.canvas.create_oval(self.coord_x0, self.coord_y0, self.coord_x1, self.coord_y1, fill= random.choice(['blue', 'yellow', 'orange', 'red', 'green', 'black', 'aqua', 'aquamarine', 'crimson', 'darkmagenta', 'lightslategrey', 'yellowgreen', 'violet']))
     def move(self):
         canvas.move(self.id, self.speed_x, self.speed_y)
         coord= self.coord_show()
@@ -27,23 +30,32 @@ class Ball:
         self.canvas.itemconfig(self.id, fill= 'orange')
     def delete_ball(self):
         global ball_list
-        for i in range(2):
-             ball_list.append(Ball(canvas))
-        ball_list.pop(self.id - 1)
+        coord= self.coord_show()
+        for pos, ball in enumerate(ball_list):
+            if ball == self:
+                break
+        ball_list.pop(pos)
         self.canvas.delete(self.id)
-
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [2, 0]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [0, 2]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [2, 2]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [-2, 0]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [0, -2]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [-2, -2]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [2, -2]))
+        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [-2, 2]))
     
 def mouse_click(event):
     global ball_list
     x = event.x 
     y = event.y
     coord_mouse = [x, y]
-    print(coord_mouse)
     for ball in ball_list:
         coord_ball = ball.coord_show()
         if x >= coord_ball[0] and x <= coord_ball[2] and y <= coord_ball[3] and y >= coord_ball[1]:
             ball.delete_ball()
-            print(ball_list)
+            break
+ 
 
             
     
@@ -59,7 +71,7 @@ HEIGHT = 600
 INDENT = 50
 canvas = Canvas(root, height= WIGHT - 2 * INDENT, width= HEIGHT - 2 * INDENT, bg= 'azure')
 canvas.place(x = INDENT, y = INDENT)
-ball_list = [Ball(canvas), Ball(canvas), Ball(canvas)]
+ball_list = [Ball(canvas, [50, 50, 100, 100], [random.randint(-2, 2), random.randint(-2, 2)]), Ball(canvas, [50, 50, 100, 100], [random.randint(-2, 2), random.randint(-2, 2)]), Ball(canvas,  [50, 50, 100, 100], [random.randint(-2, 2), random.randint(-2, 2)] )]
 root.bind('<Button-1>', mouse_click)
 while True:
     for ball in ball_list:
