@@ -3,6 +3,7 @@ import time
 import random
 class Ball:
     def __init__(self, canvas: Canvas):
+        global ball_list
         self.canvas = canvas
         self.speed_x = random.randint(-2, 2)
         self.speed_y = random.randint(-2, 2)
@@ -24,6 +25,13 @@ class Ball:
         return self.canvas.coords(self.id)
     def change_color(self):
         self.canvas.itemconfig(self.id, fill= 'orange')
+    def delete_ball(self):
+        global ball_list
+        for i in range(2):
+             ball_list.append(Ball(canvas))
+        ball_list.pop(self.id - 1)
+        self.canvas.delete(self.id)
+
     
 def mouse_click(event):
     global ball_list
@@ -34,16 +42,14 @@ def mouse_click(event):
     for ball in ball_list:
         coord_ball = ball.coord_show()
         if x >= coord_ball[0] and x <= coord_ball[2] and y <= coord_ball[3] and y >= coord_ball[1]:
-            ball.change_color()
+            ball.delete_ball()
+            print(ball_list)
+
+            
     
     
 
         
-
-
-
-
-
 
 
 root = Tk()
