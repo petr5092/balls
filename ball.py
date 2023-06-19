@@ -4,12 +4,8 @@ import random
 class Ball:
     def __init__(self, canvas: Canvas, coord_ball, speed_list):
         self.canvas = canvas
-        self.speed_x = speed_list[0]
-        self.speed_y = speed_list[1]
-        self.coord_x0 = coord_ball[0]
-        self.coord_y0 = coord_ball[1]
-        self.coord_x1 = coord_ball[2]
-        self.coord_y1 = coord_ball[3]
+        self.speed_x, self.speed_y  = speed_list
+        self.coord_x0, self.coord_y0, self.coord_x1, self.coord_y1 = coord_ball
         self.create_ball()
     def create_ball(self):
         self.id = self.canvas.create_oval(self.coord_x0, self.coord_y0, self.coord_x1, self.coord_y1, fill= random.choice(['blue', 'yellow', 'orange', 'red', 'green', 'black', 'aqua', 'aquamarine', 'crimson', 'darkmagenta', 'lightslategrey', 'yellowgreen', 'violet']))
@@ -29,6 +25,7 @@ class Ball:
     def change_color(self):
         self.canvas.itemconfig(self.id, fill= 'orange')
     def delete_ball(self):
+        speed_list = [[2, 0], [0, 2], [2, 2], [-2, 0], [-2, -2], [2, -2], [-2, 2]]
         global ball_list
         coord= self.coord_show()
         for pos, ball in enumerate(ball_list):
@@ -36,14 +33,9 @@ class Ball:
                 break
         ball_list.pop(pos)
         self.canvas.delete(self.id)
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [2, 0]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [0, 2]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [2, 2]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [-2, 0]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [0, -2]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [-2, -2]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [2, -2]))
-        ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], [-2, 2]))
+        for speed in speed_list:
+            ball_list.append(Ball(canvas, [coord[0] + 10, coord[1] + 10 , coord[2] - 10, coord[3] - 10], speed))
+       
     
 def mouse_click(event):
     global ball_list
